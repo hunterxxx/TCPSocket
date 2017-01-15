@@ -3,7 +3,7 @@ package tcp;
 import java.io.*;
 import java.net.*;
 
-public class DailyWetterServer {
+public class TCPServer {
     String [] wetterList = {"Sonnig, 20 Grad", "Sonnig, 23 Grad",
                       "Windig, 18 Grad", "Regen, 19 Grad", "Neblig, 24 Grad"};
     
@@ -22,7 +22,7 @@ public class DailyWetterServer {
                new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 String ort = inFromClient.readLine();
                 
-                //Output2
+                //Output
                 PrintWriter writer = new PrintWriter(sock.getOutputStream());
                 
                 String wetter = getWetter(ort);
@@ -55,7 +55,7 @@ public class DailyWetterServer {
     }
     
     public static void main(String[] args){
-        DailyWetterServer server = new DailyWetterServer();
+        TCPServer server = new TCPServer();
         server.go();
     }
 }
