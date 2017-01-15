@@ -4,33 +4,34 @@ import java.io.*;
 import java.net.*;
 
 class TCPClient {
-
+    
     public static void main(String argv[]) throws Exception {
         String sentence;
         String modifiedSentence;
         String host = "localhost";
         Socket clientSocket = null;
-
-        System.out.println("Trying 127.0.0.1... ");
+        
+        System.out.println("'exit' to disconnect");
         while (true) {
             try {
                 clientSocket = new Socket(host, 4242);
-                //in case server 
+                //server problem timeout in 15 seconds to prevent stuck
                 clientSocket.setSoTimeout(15000);
-                //System.out.println("Connected to localhost");
-                System.out.println("Please enter a city");
                 BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-
                 DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
                 BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
+                
+                System.out.println("Please type the city name: ");
                 sentence = inFromUser.readLine();
                 outToServer.writeBytes(sentence + '\n');
                 modifiedSentence = inFromServer.readLine();
                 System.out.println("FROM SERVER: " + modifiedSentence);
-                //unbedingt?
-                outToServer.flush();
 
+                //escape word
+                if (sentence.equals("exit")) {
+                    System.exit(0);
+                }
+                
             } catch (IOException ex) {
                 System.err.println(ex);
             } finally {
@@ -40,5 +41,6 @@ class TCPClient {
                 }
             }
         }
+        //while (!sentence.trim().equals("bye"));
     }
 }
